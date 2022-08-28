@@ -1,9 +1,10 @@
 <template>
   <div class="flex">
     <v-data-table
+      ref="table"
       v-model="selected"
       :single-select="singleSelect"
-      item-key="sıra"
+      item-key="ogrenciNo"
       show-select
       :headers="headers"
       :items="students"
@@ -91,6 +92,7 @@
                 class="mb-2"
                 v-bind="attrs"
                 v-on="on"
+                @click="newStudent = []"
               >
                 YENİ ÖĞRENCİ
               </v-btn>
@@ -98,172 +100,135 @@
 
             <v-card>
               <v-card-title>
-                <span class="text-h5 text mr-4">YENİ ÖĞRENCİ</span>
-                <sub class="text--secondary">Öğrenci bilgilerini doldurunuz</sub>
+                <span class="text-h5 text mr-4">{{textHead}}</span>
+                <sub class="text--secondary">{{textSub}}</sub>
               </v-card-title>
 
               <v-card-text>
                 <v-container>
-                  <v-row>
-                    <v-col
+                  
+                    <form 
+                    id="app"
+                    @submit="addStudent"
+                    action="#"
+                    >
+
+                    <v-row>
+                      
+                      <v-col
                       cols="12"
                       sm="6"
                       md="4"
-                    >
-                      <v-text-field
-                        class="required_field"
-                        color="##F44336"
-                        v-model="newStudent.ad"
-                        label="Adı*"
-                        required
-                        :rules="['Required']"
-                      ></v-text-field>
-                    </v-col>
-
-                    <v-col
+                      >
+                      <input type="text" id="name" class="formItem" v-model="newStudent.ad" placeholder="*Adı" data-required-message="* Öğrenci Adını Giriniz" required>
+                      </v-col>
+                      <v-col
                       cols="12"
                       sm="6"
                       md="4"
-                    >
-                      <v-text-field
-                        class="required_field"
-                        color="##F44336"
-                        v-model="newStudent.soyad"
-                        label="Soy Adı*"
-                      ></v-text-field>
-                    </v-col>
-
-                    <v-col
+                      >
+                      <input type="text" id="lastname" class="formItem" v-model="newStudent.soyad" placeholder="*Soyadı" data-required-message="* Öğrenci Soyadını Giriniz" required>
+                      </v-col>
+                      <v-col
                       cols="12"
                       sm="6"
                       md="4"
-                    >
-                      <v-text-field
-                        class="required_field"
-                        color="##F44336"
-                        v-model="newStudent.ogrenciNo"
-                        label="Okul Numarası*"
-                      ></v-text-field>
-                    </v-col>
-
-                    <v-col
+                      >
+                      <input type="text" id="studentNo" class="formItem" v-model="newStudent.ogrenciNo" placeholder="*Öğnreci No" data-required-message="* Öğrenci Numarasını Giriniz" required>
+                      </v-col>
+                      <v-col
                       cols="12"
                       sm="6"
                       md="4"
-                    >
-                      <v-text-field
-                        class="required_field"
-                        color="##F44336"
-                        v-model="newStudent.sınıf"
-                        label="Sınıfı*"
-                      ></v-text-field>
-                    </v-col>
-
-                    <v-col
+                      >
+                      <input type="text" id="class" class="formItem" v-model="newStudent.sınıf" placeholder="*Sınıfı" data-required-message="* Öğrenci Sınıfını Giriniz" required>
+                      </v-col>
+                      <v-col
                       cols="12"
                       sm="6"
                       md="4"
-                    >
-                      <v-text-field
-                        class="required_field"
-                        color="##F44336"
-                        v-model="newStudent.sube"
-                        label="Şubesi*"
-                      ></v-text-field>
-                    </v-col>
-
-
-                    <v-col
+                      >
+                      <input type="text" id="classBranch" class="formItem" v-model="newStudent.sube" placeholder="*Şubesi" data-required-message="* Öğrenci Şubesini Giriniz" required>
+                      </v-col>
+                      <v-col
                       cols="12"
                       sm="6"
                       md="4"
-                    >
-                      <v-text-field
-                        v-model="newStudent.cinsiyet"
-                        label="Cinsiyeti"
-                      ></v-text-field>
-                    </v-col>
-
-                    <v-col
+                      >
+                      <input type="text" id="gender" class="formItem" v-model="newStudent.cinsiyet" placeholder="Cinsiyeti (E/K)">
+                      </v-col>
+                      <v-col
                       cols="12"
                       sm="6"
                       md="4"
-                    >
-                      <v-text-field
-                        v-model="newStudent.tcno"
-                        label="Kimlik Numarası"
-                      ></v-text-field>
-                    </v-col>
-
-                    <v-col
+                      >
+                      <input type="text" id="id" class="formItem" v-model="newStudent.tcno" placeholder="TC Kimlik No">
+                      </v-col>
+                      <v-col
                       cols="12"
                       sm="6"
                       md="4"
-                    >
-                      <v-text-field
-                        v-model="newStudent.ogrenciTel"
-                        label="Tel No"
-                      ></v-text-field>
-                    </v-col>
-
-                    <v-col
+                      >
+                      <input type="text" id="tel" class="formItem" v-model="newStudent.ogrenciTel" placeholder="Telefon No">
+                      </v-col>
+                      <v-col
                       cols="12"
                       sm="6"
                       md="4"
-                    >
-                      <v-text-field
-                        v-model="newStudent.anneTel"
-                        label="Anne Tel No"
-                      ></v-text-field>
-                    </v-col>
-
-                    <v-col
+                      >
+                      <input type="text" id="anneTel" class="formItem" v-model="newStudent.anneTel" placeholder="Anne Telefon No">
+                      </v-col>
+                      <v-col
                       cols="12"
                       sm="6"
                       md="4"
-                    >
-                      <v-text-field
-                        v-model="newStudent.babaTel"
-                        label="Baba Tel No"
-                      ></v-text-field>
-                    </v-col>
-
-                    <v-col
+                      >
+                      <input type="text" id="babaTel" class="formItem" v-model="newStudent.babaTel" placeholder="Baba Telefon No">
+                      </v-col>
+                      <v-col
                       cols="12"
                       sm="6"
                       md="4"
-                    >
-                      <v-text-field
-                        v-model="newStudent.ogrenciMail"
-                        label="Mail Adresi"
-                      ></v-text-field>
-                    </v-col>
-
-                  </v-row>
+                      >
+                      <input type="email" id="mail" class="formItem" v-model="newStudent.ogrenciMail" placeholder="Mail Adresi">
+                      </v-col>
+                      <v-col
+                      cols="12"
+                      sm="6"
+                      md="4"
+                      >
+                        <v-card-actions>
+                          <v-spacer></v-spacer>
+                          <v-btn
+                            color="blue darken-1"
+                            text
+                            @click="closeDialog"
+                          >
+                            KAPAT
+                          </v-btn>
+                          
+                          <v-btn
+                            color="blue darken-1"
+                            text
+                          >
+                            <input
+                              type="submit"
+                              value="EKLE"
+                            >
+                          </v-btn>
+                            
+                        </v-card-actions>
+                      </v-col>
+                    </v-row>
+                    </form>
                 </v-container>
               </v-card-text>
 
-              <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn
-                  color="blue darken-1"
-                  text
-                  @click="closeDialog"
-                >
-                  KAPAT
-                </v-btn>
-                <v-btn
-                  color="blue darken-1"
-                  text
-                  @click="save"
-                >
-                  EKLE
-                </v-btn>
-              </v-card-actions>
+              
             </v-card>
 
           </v-dialog>
-          
+
         </v-toolbar>
  
       </template>
@@ -305,39 +270,55 @@
             </v-card>
         </v-dialog>
 
-      </template>
+        <v-dialog v-model="dialogSave" max-width="1000px">        
+            <template v-slot:activator="{ on, attrs }">
+                <v-btn
+                  class="ml-2 mb-2"
+                  color="primary"
+                  dark
+                  v-bind="attrs"
+                  v-on="on"
+                >
+                  KAYDET
+                </v-btn>
+            </template>
 
-      <template>
-        <v-dialog v-model="dialogComplete">
-           <v-card>
-              <v-card-title class="text-h5">{{dialogMessage}}</v-card-title>
+            <v-card>
+              <v-card-title class="text-h5">Seçilen öğrencileri kaydetmek istediğinizden emin misiniz?</v-card-title>
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="blue darken-1" text @click="closeDialog">TAMAM</v-btn>
+                <v-btn color="blue darken-1" text @click="closeDialog">ÇIKIŞ</v-btn>
+                <v-btn color="blue darken-1" text @click="saveStudents">KAYDET</v-btn>
                 <v-spacer></v-spacer>
               </v-card-actions>
             </v-card>
         </v-dialog>
+
       </template>
 
     </v-data-table>
-    
+
+    <template>
+      <div id="jsonField">
+
+      </div>
+    </template>
   </div>
 </template>
 
 <script>
-  import xlsx from "xlsx";
+import xlsx from "xlsx";
 
   export default {
 
     data: () => ({
+        jsonData: JSON,
         dialogAddStudent: false,
         dialogImportExcel: false,
+        dialogSave: false,
         dialogDelete: false,
-        dialogComplete: false,
         singleSelect: false,
         selected: [],
-        dialogMessage: "",
         headers: [
             { text: "Sıra", value: "sıra" },
             { text: "Sınıf", value: "sınıf" },
@@ -351,9 +332,10 @@
             { text: "Baba Tel", value: "babaTel" },
             { text: "Öğrenci Tel", value: "ogrenciTel" },
             { text: "Öğrenci Mail", value: "ogrenciMail" },
+            { text: "Kayıt Durumu", value: "durumu" },
             { text: 'Düzenle', value: 'actions', sortable: false },
         ],
-       
+        
         students: [],
         editedIndex: -1,
         newStudent: {
@@ -368,10 +350,23 @@
             anneTel:"",
             babaTel:"",
             ogrenciTel:"",
-            ogrenciMail:""
-        }
+            ogrenciMail:"",
+            durumu:""
+        },
     }),
-
+    watch: {
+      students(){
+        console.log("students değiştirildi")
+      }
+    },
+    computed: {
+      textHead () {
+        return this.editedIndex === -1 ? 'YENİ ÖĞRENCİ' : 'ÖĞRENCİ BİLGİLERİNİ DÜZENLE'
+      },
+      textSub () {
+        return this.editedIndex === -1 ? 'Öğrenci bilgilerini doldurunuz' : 'Öğrenci bilgilerini değiştirin'
+      }
+    },
     methods: {
 
         importExcel(e) {
@@ -391,9 +386,18 @@
               });
               const wsname = workbook.SheetNames[0]; 
               const importedStudent = XLSX.utils.sheet_to_json(workbook.Sheets[wsname]);
-              this.students = this.students.concat(importedStudent);
-              this.addAutoSortNumbers();
-              this.dialogImportExcel = false;
+              if(!this.checkStudentsNo(importedStudent)){
+                alert("Aynı öğrenci nosuna sahip başka öğrenciler olduğu için bu liste eklenemez ! Lütfen kontrol ediniz.");
+              }
+              else{
+                this.students = this.students.concat(importedStudent);
+                this.students.forEach( student => {
+                  student.durumu = "Kayıtlı Değil";
+                });
+                this.addAutoSortNumbers();
+                this.dialogImportExcel = false;
+              }
+              
             } catch (e) {
               return alert("Read failure!"+e);
             }
@@ -412,38 +416,42 @@
         closeDialog() {
             this.dialogAddStudent = false;
             this.dialogImportExcel = false;
-            this.dialogComplete = false;
             this.dialogDelete = false;
+            this.dialogSave = false;
+            this.editedIndex = -1
         },
 
-        save() {
-
-            if (this.editedIndex > -1) {
-               Object.assign(this.students[this.editedIndex], this.newStudent);        
-            }
-            else {
-              this.newStudent.sıra =  (this.students.length == 0 ? 1 : this.students[this.students.length-1].sıra + 1);
+        addStudent() {
+          this.newStudent.durumu = "Kayıtlı Değil";
+          if(!this.checkStudentNo(this.newStudent)){
+              alert("Aynı öğrenci numarasına sahip başka öğrenci olduğu için eklenemez !!");
+          }
+          else{
+            if(this.editedIndex == -1){
               this.students.push(this.newStudent);
+              this.closeDialog();
+              this.newStudent = [];
+              this.addAutoSortNumbers();
             }
-            this.addAutoSortNumbers();
-            this.closeDialog();
-            this.dialogMessage = "Öğrenci başarıyla eklendi";
-            this.dialogComplete = true;
-            this.newStudent = [];
+            else{
+              Object.assign(this.students[this.editedIndex], this.newStudent);    
+              this.closeDialog();
+              this.newStudent = [];
+              this.editedIndex = -1;
+            }             
+          }
+         
         },
-
-        requiredControls(){
-          
-        },
-
         deleteStudents(){
           if(this.selected.length > 0){
             const tempList = this.students.filter(x => !this.selected.includes(x));
             this.students.splice(0,this.students.length)
             this.students = tempList;
           }
-          this.dialogDelete = false;
+          this.selected = [];
+          this.addJsonData();
           this.addAutoSortNumbers();
+          this.dialogDelete = false;
         },
 
         addAutoSortNumbers(){
@@ -453,6 +461,54 @@
             number++;
           });
         },
+
+        checkStudentNo(checkedItem){
+          if (this.editedIndex == -1){
+            for ( let i = 0; i < this.students.length; i++) { 
+            if(this.students[i].ogrenciNo == Number(checkedItem.ogrenciNo))
+              return false;
+            }
+            return true;
+          }
+          else{
+            for ( let i = 0; i < this.students.length; i++) {
+              if( this.students[this.editedIndex].ogrenciNo == Number(checkedItem.ogrenciNo))
+                return true; 
+              else if(this.students[i].ogrenciNo == Number(checkedItem.ogrenciNo))
+                return false;
+            }
+            return true;
+          }
+          
+
+        },
+        checkStudentsNo(checkedItems){
+          for ( let i = 0; i < this.students.length; i++) { 
+            for ( let j = 0; j < checkedItems.length; j++){
+              if(this.students[i].ogrenciNo == Number(checkedItems[j].ogrenciNo))
+                return false;
+            }
+          }
+          return true;
+
+        },
+        addJsonData(){
+          this.jsonData = JSON.stringify(this.students);
+          document.getElementById('jsonField').innerHTML = this.jsonData;
+        },
+
+        saveStudents(){
+          this.students = this.students.map((x)=>{
+            x.durumu = "kayıtlı";
+            return x;
+          })
+          
+          this.dialogSave = false; 
+          return this.addJsonData();
+          
+      },
+        
+        
     }
 }
 </script>
@@ -462,4 +518,20 @@
   color: #F44336;
   opacity: 1;
 }
+.formItem{
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+input:required::placeholder {
+    font-weight: bold;
+    opacity: .5;
+    color: red;
+}
+
 </style>
